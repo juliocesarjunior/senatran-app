@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualizar placas - Senatran App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <a class="back-link" href="index.html">&larr; Voltar para inicio</a>
+      <h1>Visualizar placas</h1>
+      <p class="subtitle">Filtre, selecione e exporte os registros.</p>
+
+      <section class="card">
+        <div class="actions wrap align-end">
+          <label class="filter-label">
+            Filtrar placa
+            <input id="filterInput" type="text" placeholder="Digite a placa" />
+          </label>
+          <button id="clearFilterBtn" type="button" class="secondary">Limpar filtro</button>
+          <div class="dropdown">
+            <button id="exportDropdownBtn" type="button">Exportar</button>
+            <div id="exportDropdownMenu" class="dropdown-menu">
+              <button id="exportCsvBtn" type="button" class="dropdown-item secondary">CSV</button>
+              <button id="exportExcelBtn" type="button" class="dropdown-item secondary">EXCEL</button>
+              <button id="exportPdfBtn" type="button" class="dropdown-item secondary">PDF</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <label class="table-checkbox-label">
+                    <input id="selectAllCheckbox" type="checkbox" />
+                  </label>
+                </th>
+                <th>Placa</th>
+                <th>Quantidade dados</th>
+                <th>Data criacao</th>
+                <th>Items</th>
+              </tr>
+            </thead>
+            <tbody id="platesSelectionBody"></tbody>
+          </table>
+        </div>
+        <p id="message" class="message" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <div id="itemsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="itemsModalTitle">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="itemsModalTitle">Itens da placa</h2>
+          <button id="closeItemsModalBtn" type="button" class="secondary">Fechar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>AIT</th>
+                <th>Codigo infracao/tipificacao</th>
+                <th>Vigencia inicial</th>
+                <th>Vigencia final</th>
+                <th>Aditivo inicial</th>
+                <th>Aditivo final</th>
+              </tr>
+            </thead>
+            <tbody id="itemsModalBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="confirmDeletePlateModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmDeleteTitle">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2 id="confirmDeleteTitle">Confirmar exclusao</h2>
+        </div>
+        <p>Tem certeza que deseja excluir esta placa?</p>
+        <div class="actions right">
+          <button id="cancelDeletePlateBtn" type="button" class="secondary">Cancelar</button>
+          <button id="confirmDeletePlateBtn" type="button" class="danger">Excluir</button>
+        </div>
+      </div>
+    </div>
+    <script src="libs/xlsx.full.min.js"></script>
+    <script src="libs/jspdf.umd.min.js"></script>
+    <script src="libs/jspdf.plugin.autotable.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

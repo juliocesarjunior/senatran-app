@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar placas - Senatran App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <a class="back-link" href="index.html">&larr; Voltar para inicio</a>
+      <h1>Editar placas</h1>
+      <p class="subtitle">Lista completa dos cadastros para editar ou excluir.</p>
+
+      <section class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>UUID</th>
+                <th>Placa</th>
+                <th>Qtd itens</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody id="editPlatesBody"></tbody>
+          </table>
+        </div>
+        <p id="message" class="message" aria-live="polite"></p>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

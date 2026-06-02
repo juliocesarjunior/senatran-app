@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar cadastro - Senatran App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <a id="backToOriginLink" class="back-link" href="index.html">&larr; Voltar para inicio</a>
+      <h1>Criar cadastro</h1>
+      <p class="subtitle">Cadastre placa e os DataItems.</p>
+
+      <section class="card">
+        <p id="formModeLabel" class="helper-text">Modo: novo cadastro</p>
+        <div class="grid one-col">
+          <label>
+            Placa
+            <input id="placaInput" type="text" maxlength="10" placeholder="ABC1D23" autocomplete="off" />
+            <span id="placaError" class="field-error"></span>
+          </label>
+        </div>
+
+        <h3>Itens de dados da placa</h3>
+        <div id="dataItemsContainer" class="data-items-container"></div>
+
+        <div class="actions split-actions">
+          <button id="duplicateItemBtn" type="button" class="warning">Adicionar +</button>
+          <div class="inline-actions">
+            <button id="clearItemsBtn" type="button" class="danger">Apagar todos</button>
+            <button id="savePlateBtn" type="button">Salvar</button>
+          </div>
+        </div>
+        <p id="message" class="message" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <div id="confirmClearModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmClearTitle">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2 id="confirmClearTitle">Confirmar limpeza</h2>
+        </div>
+        <p>Essa acao vai apagar todos os itens do formulario. Deseja continuar?</p>
+        <div class="actions right">
+          <button id="cancelClearBtn" type="button" class="secondary">Cancelar</button>
+          <button id="confirmClearBtn" type="button" class="danger">Confirmar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="saveSuccessModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="saveSuccessTitle">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2 id="saveSuccessTitle">Cadastro salvo</h2>
+        </div>
+        <p id="saveSuccessText"></p>
+        <div class="actions right">
+          <button id="closeSaveSuccessBtn" type="button">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
