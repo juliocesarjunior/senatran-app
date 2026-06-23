@@ -131,6 +131,9 @@ function normalizeDataItem(item) {
   return {
     ait: String(item.ait || "").trim(),
     codigoInfracaoTipificacao: String(item.codigoInfracaoTipificacao || "").trim(),
+    tipificacao: String(item.tipificacao || "").trim(),
+    dataInfracao: String(item.dataInfracao || "").trim(),
+    numeroContrato: String(item.numeroContrato || "").trim(),
     dataInicialVigenciaContrato: String(item.dataInicialVigenciaContrato || "").trim(),
     dataFinalVigencia: String(item.dataFinalVigencia || "").trim(),
     aditivoDataInicial: String(item.aditivoDataInicial || "").trim(),
@@ -142,6 +145,9 @@ function createEmptyDataItem() {
   return {
     ait: "",
     codigoInfracaoTipificacao: "",
+    tipificacao: "",
+    dataInfracao: "",
+    numeroContrato: "",
     dataInicialVigenciaContrato: "",
     dataFinalVigencia: "",
     aditivoDataInicial: "",
@@ -176,7 +182,7 @@ function renderEditingItems() {
           <span class="field-error">${itemErrors.ait || ""}</span>
         </label>
         <label class="span-6">
-          Codigo infracao/tipificacao
+          Código infração
           <input
             type="text"
             data-index="${index}"
@@ -186,7 +192,37 @@ function renderEditingItems() {
           <span class="field-error">${itemErrors.codigoInfracaoTipificacao || ""}</span>
         </label>
         <label class="span-6">
-          Data inicial vigencia contrato
+          Tipificação
+          <input
+            type="text"
+            data-index="${index}"
+            data-field="tipificacao"
+            value="${item.tipificacao}"
+          />
+          <span class="field-error"></span>
+        </label>
+        <label class="span-6">
+          Data da infração
+          <input
+            type="date"
+            data-index="${index}"
+            data-field="dataInfracao"
+            value="${item.dataInfracao}"
+          />
+          <span class="field-error"></span>
+        </label>
+        <label class="span-6">
+          Número do contrato
+          <input
+            type="text"
+            data-index="${index}"
+            data-field="numeroContrato"
+            value="${item.numeroContrato}"
+          />
+          <span class="field-error"></span>
+        </label>
+        <label class="span-6">
+          Data inicial vigência contrato
           <input
             type="date"
             data-index="${index}"
@@ -196,7 +232,7 @@ function renderEditingItems() {
           <span class="field-error"></span>
         </label>
         <label class="span-6">
-          Data final vigencia
+          Data final vigência
           <input
             type="date"
             data-index="${index}"
@@ -240,7 +276,7 @@ function duplicateEmptyItem() {
 function removeItemByIndex(index) {
   syncEditingItemsFromInputs();
   if (state.editingItems.length <= 1) {
-    setMessage("Mantenha ao menos um DataItem para preenchimento.", "error");
+    setMessage("Mantenha ao menos um item de dados para preenchimento.", "error");
     return;
   }
   state.editingItems = state.editingItems.filter((_, i) => i !== index);
@@ -281,27 +317,27 @@ function validateEditingItems(items) {
   let hasError = false;
 
   if (!normalizePlate(el.placaInput ? el.placaInput.value : "")) {
-    state.formErrors.placa = "Placa e obrigatoria.";
+    state.formErrors.placa = "Placa é obrigatória.";
     hasError = true;
   }
 
   for (let index = 0; index < items.length; index += 1) {
     const item = items[index];
     if (!item.ait) {
-      state.formErrors.items[index].ait = "AIT e obrigatorio.";
+      state.formErrors.items[index].ait = "AIT é obrigatório.";
       hasError = true;
     }
     if (!item.codigoInfracaoTipificacao) {
-      state.formErrors.items[index].codigoInfracaoTipificacao = "Codigo infracao/tipificacao e obrigatorio.";
+      state.formErrors.items[index].codigoInfracaoTipificacao = "Código infração é obrigatório.";
       hasError = true;
     }
     if (!isDateRangeValid(item.dataInicialVigenciaContrato, item.dataFinalVigencia)) {
-      setMessage(`Data inicial da vigencia invalida no Dados ${index + 1}.`, "error");
+      setMessage(`Data inicial da vigência inválida nos Dados ${index + 1}.`, "error");
       hasError = true;
       break;
     }
     if (!isDateRangeValid(item.aditivoDataInicial, item.aditivoDataFinal)) {
-      setMessage(`Data inicial do aditivo invalida no Dados ${index + 1}.`, "error");
+      setMessage(`Data inicial do aditivo inválida nos Dados ${index + 1}.`, "error");
       hasError = true;
       break;
     }
@@ -331,7 +367,7 @@ function savePlateWithItems() {
   if (state.editingPlateId) {
     const plateToEdit = state.data.placas.find((item) => item.id === state.editingPlateId);
     if (!plateToEdit) {
-      setMessage("Placa em edicao nao encontrada.", "error");
+      setMessage("Placa em edição não encontrada.", "error");
       return;
     }
     plateToEdit.placa = placa;
@@ -385,6 +421,9 @@ function getFlatRows(placas) {
       placa: plate.placa,
       ait: item.ait,
       codigoInfracaoTipificacao: item.codigoInfracaoTipificacao,
+      tipificacao: item.tipificacao,
+      dataInfracao: item.dataInfracao,
+      numeroContrato: item.numeroContrato,
       dataInicialVigenciaContrato: item.dataInicialVigenciaContrato,
       dataFinalVigencia: item.dataFinalVigencia,
       aditivoDataInicial: item.aditivoDataInicial,
@@ -402,6 +441,9 @@ function getGroupedRowsForExport(placas) {
       placa: index === 0 ? plate.placa : "",
       ait: item.ait,
       codigoInfracaoTipificacao: item.codigoInfracaoTipificacao,
+      tipificacao: item.tipificacao,
+      dataInfracao: item.dataInfracao,
+      numeroContrato: item.numeroContrato,
       dataInicialVigenciaContrato: item.dataInicialVigenciaContrato,
       dataFinalVigencia: item.dataFinalVigencia,
       aditivoDataInicial: item.aditivoDataInicial,
@@ -562,7 +604,10 @@ function convertRowsForExport(rows) {
   return rows.map((row) => ({
     Placa: row.placa,
     AIT: row.ait,
-    Codigo_Infracao_Tipificacao: row.codigoInfracaoTipificacao,
+    Codigo_Infracao: row.codigoInfracaoTipificacao,
+    Tipificacao: row.tipificacao,
+    Data_Infracao: row.dataInfracao,
+    Numero_Contrato: row.numeroContrato,
     Data_Inicial_Vigencia_Contrato: row.dataInicialVigenciaContrato,
     Data_Final_Vigencia: row.dataFinalVigencia,
     Aditivo_Data_Inicial: row.aditivoDataInicial,
@@ -595,7 +640,10 @@ function exportCSV(rows, fileName) {
   const headers = [
     "Placa",
     "AIT",
-    "Codigo Infracao/Tipificacao",
+    "Codigo Infracao",
+    "Tipificacao",
+    "Data Infracao",
+    "Numero Contrato",
     "Data Inicial Vigencia Contrato",
     "Data Final Vigencia",
     "Aditivo Data Inicial",
@@ -606,6 +654,9 @@ function exportCSV(rows, fileName) {
       row.placa,
       row.ait,
       row.codigoInfracaoTipificacao,
+      row.tipificacao,
+      row.dataInfracao,
+      row.numeroContrato,
       row.dataInicialVigenciaContrato,
       row.dataFinalVigencia,
       row.aditivoDataInicial,
@@ -626,7 +677,7 @@ function exportExcel(rows, fileName) {
     return;
   }
   if (!window.XLSX) {
-    setMessage("Biblioteca Excel nao carregada.", "error");
+    setMessage("Biblioteca Excel não carregada.", "error");
     return;
   }
   const worksheet = window.XLSX.utils.json_to_sheet(convertRowsForExport(rows));
@@ -642,7 +693,7 @@ function exportPDF(rows, fileName) {
     return;
   }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    setMessage("Biblioteca PDF nao carregada.", "error");
+    setMessage("Biblioteca PDF não carregada.", "error");
     return;
   }
 
@@ -653,7 +704,10 @@ function exportPDF(rows, fileName) {
       [
         "Placa",
         "AIT",
-        "Codigo Infracao Tipificacao",
+        "Codigo Infracao",
+        "Tipificacao",
+        "Data Infracao",
+        "Numero Contrato",
         "Data Inicial Vigencia Contrato",
         "Data Final Vigencia",
         "Aditivo Data Inicial",
@@ -664,12 +718,15 @@ function exportPDF(rows, fileName) {
       row.placa,
       row.ait,
       row.codigoInfracaoTipificacao,
+      row.tipificacao,
+      row.dataInfracao,
+      row.numeroContrato,
       row.dataInicialVigenciaContrato,
       row.dataFinalVigencia,
       row.aditivoDataInicial,
       row.aditivoDataFinal,
     ]),
-    styles: { fontSize: 8 },
+    styles: { fontSize: 7 },
   });
   doc.save(fileName);
   setMessage(`Arquivo PDF exportado: ${fileName}`, "success");
@@ -688,7 +745,7 @@ function getRowsForExport(mode) {
 function startEditingPlate(plateId) {
   const plate = state.data.placas.find((item) => item.id === plateId);
   if (!plate) {
-    setMessage("Placa nao encontrada para edicao.", "error");
+    setMessage("Placa não encontrada para edição.", "error");
     return;
   }
   const originPage = window.location.pathname.split("/").pop() || "index.html";
@@ -700,7 +757,7 @@ function openItemsModal(plateId) {
   if (!el.itemsModal || !el.itemsModalBody) return;
   const plate = state.data.placas.find((item) => item.id === plateId);
   if (!plate) {
-    setMessage("Placa nao encontrada para visualizar itens.", "error");
+    setMessage("Placa não encontrada para visualizar itens.", "error");
     return;
   }
   if (el.itemsModalTitle) {
@@ -710,7 +767,7 @@ function openItemsModal(plateId) {
 
   if (!plate.dados.length) {
     const tr = document.createElement("tr");
-    tr.innerHTML = '<td colspan="6">Nenhum item cadastrado.</td>';
+    tr.innerHTML = '<td colspan="9">Nenhum item cadastrado.</td>';
     el.itemsModalBody.appendChild(tr);
   } else {
     plate.dados.forEach((item) => {
@@ -718,6 +775,9 @@ function openItemsModal(plateId) {
       tr.innerHTML = `
         <td>${item.ait}</td>
         <td>${item.codigoInfracaoTipificacao}</td>
+        <td>${item.tipificacao || "-"}</td>
+        <td>${formatDateDisplay(item.dataInfracao)}</td>
+        <td>${item.numeroContrato || "-"}</td>
         <td>${formatDateDisplay(item.dataInicialVigenciaContrato)}</td>
         <td>${formatDateDisplay(item.dataFinalVigencia)}</td>
         <td>${formatDateDisplay(item.aditivoDataInicial)}</td>
@@ -756,7 +816,7 @@ function confirmDeleteSelectedPlate() {
 function deletePlate(plateId) {
   const target = state.data.placas.find((item) => item.id === plateId);
   if (!target) {
-    setMessage("Placa nao encontrada para exclusao.", "error");
+    setMessage("Placa não encontrada para exclusão.", "error");
     return;
   }
   state.data.placas = state.data.placas.filter((item) => item.id !== plateId);
@@ -767,7 +827,7 @@ function deletePlate(plateId) {
   saveToStorage();
   renderVisualizar();
   renderEditar();
-  setMessage(`Placa ${target.placa} excluida com sucesso.`, "success");
+  setMessage(`Placa ${target.placa} excluída com sucesso.`, "success");
 }
 
 function onEditTableClick(event) {
@@ -902,7 +962,7 @@ function applyEditModeFromQuery() {
   if (!editId) return;
   const plate = state.data.placas.find((item) => item.id === editId);
   if (!plate) {
-    setMessage("Cadastro para edicao nao encontrado.", "error");
+    setMessage("Cadastro para edição não encontrado.", "error");
     return;
   }
   state.editingPlateId = plate.id;
